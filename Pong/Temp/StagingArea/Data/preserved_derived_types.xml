@@ -1,0 +1,9 @@
+<linker>
+<assembly fullname="Assembly-UnityScript">
+<type fullname="BallControl" preserve="all"/>
+<type fullname="GameManager" preserve="all"/>
+<type fullname="GameSetup" preserve="all"/>
+<type fullname="PlayerControls" preserve="all"/>
+<type fullname="SideWalls" preserve="all"/>
+</assembly>
+</linker>
