@@ -45,10 +45,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Script\AIControl.js" />
+     <Compile Include="Assets\Script\AudioManager.js" />
      <Compile Include="Assets\Script\BallControl.js" />
      <Compile Include="Assets\Script\GameManager.js" />
      <Compile Include="Assets\Script\GameSetup.js" />
+     <Compile Include="Assets\Script\MenuManager.js" />
      <Compile Include="Assets\Script\PlayerControls.js" />
+     <Compile Include="Assets\Script\Setup.js" />
      <Compile Include="Assets\Script\SideWalls.js" />
  <Reference Include="UnityEngine.UI">
  <HintPath>/opt/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>

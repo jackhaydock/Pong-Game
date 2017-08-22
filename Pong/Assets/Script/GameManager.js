@@ -1,7 +1,11 @@
 ﻿#pragma strict
 
+var obj_menus: GameObject;
+
 static var plyr_score_left : int = 0;
 static var plyr_score_right : int = 0;
+var score_left_txt: UI.Text;
+var score_right_txt: UI.Text;
 
 var skin_gui : GUISkin;
 
@@ -11,17 +15,30 @@ var gui_menu : System.Boolean;
 var game_mute : System.Boolean;
 
 //Keycodes
-var key_pause: KeyCode;
 var key_reset: KeyCode;
+var key_pause: KeyCode;
 
-var str_pause: String;
-var str_mute: String;
+//------------------------------------------------------------------------------------------------//
+//Startup
+//------------------------------------------------------------------------------------------------//
 
 function Start(){
 	trns_ball = GameObject.FindGameObjectWithTag ("Ball").transform;
-	
-	str_pause = "Pause";
-	str_mute = "Mute";
+
+	//find score gameobjects
+	if (GameObject.Find("GUI/gui_game/score_left")) {
+		score_left_txt = GameObject.Find("GUI/gui_game/score_left").GetComponent(UI.Text);
+	}
+	if (GameObject.Find("GUI/gui_game/score_right")) {
+		score_right_txt = GameObject.Find("GUI/gui_game/score_right").GetComponent(UI.Text);
+	}
+
+	//Find obj_menus object
+	if (GameObject.Find("obj_menus")) {
+		obj_menus = GameObject.Find("obj_menus");
+	} else {
+		Debug.Log("obj_menus not found");
+	}
 }
 
 //Change score when walls report detection (SideWalls.js)
@@ -38,87 +55,54 @@ static function fun_score (wall_name : String) {
 
 }
 
-//Keys (Pause and Reset)
 function Update () {
+	//Keys (Reset)
 	if (Input.GetKeyDown(key_pause)) {
 		game_pause();
 	}
 
+	//Keys (Reset)
 	if (Input.GetKeyDown(key_reset)) {
 		game_reset();
 	}
-}
 
-//GUI
-function OnGUI () {
-
-	GUI.skin = skin_gui;
 //Score
-	GUI.Label (new Rect (Screen.width/2 -150, 20, 0, 10), "" + plyr_score_left);
-	GUI.Label (new Rect (Screen.width/2 +150, 20, 0, 10), "" + plyr_score_right);
-
-//Menu Toggle
-	if (GUI.Button ( new Rect (Screen.width - 80, 0, 80, 20), "Menu")) {
-		if (gui_menu == false) {
-			gui_menu = true;
-		} else {
-			gui_menu = false;
-		}
+	if (GameObject.Find("GUI/gui_game/score_left")) {
+		score_left_txt.text = plyr_score_left.ToString();
 	}
-//Menu
-	if (gui_menu == true) {
-		//Pause
-		if (GUI.Button ( new Rect (Screen.width - 80, 20, 80, 20), str_pause)) {
-		game_pause();
-		}
-		//Reset
-		if (GUI.Button ( new Rect (Screen.width - 80, 40, 80, 20), "Reset")) {
-		game_reset();
-		}
-		//Mute
-		if (GUI.Button ( new Rect (Screen.width - 80, 60, 80, 20), str_mute)) {
-			game_mute = ! game_mute;
-     			AudioListener.volume =  game_mute ? 0 : 1;
-			if (str_mute == "Mute") {
-				str_mute = "Unmute";
-			}
-			else {
-				str_mute = "Mute";
-			}
-		}
-		//Quit
-		if (GUI.Button ( new Rect (Screen.width - 80, 80, 80, 20), "Quit")) {
-		game_quit();
-		}
+	if (GameObject.Find("GUI/gui_game/score_right")) {
+		score_right_txt.text = plyr_score_right.ToString();
 	}
-
 }
 
 
+//------------------------------------------------------------------------------------------------//
+//Pause, Reset and Quit
+//------------------------------------------------------------------------------------------------//
 
-//Pause Function
+//Pause function
 function game_pause () {
 	if (Time.timeScale == 1) {
-			Time.timeScale = 0;
-			str_pause = "Play";
-		}
-		else {
-			Time.timeScale = 1;
-			str_pause = "Pause";
+		obj_menus.GetComponent(MenuManager).menu_pause();
+		Time.timeScale = 0;
+	}else {	
+		obj_menus.GetComponent(MenuManager).obj_menu_pause.SetActive(false);
+		obj_menus.GetComponent(MenuManager).obj_menu_opt.SetActive(false);
+		obj_menus.GetComponent(MenuManager).obj_menu_quit_m.SetActive(false);
+		obj_menus.GetComponent(MenuManager).obj_menu_quit_d.SetActive(false);
+		Time.timeScale = 1;
 		}
 }
 
 //Reset Function
 function game_reset () {
-		plyr_score_left = 0;
-		plyr_score_right = 0;
-		trns_ball.gameObject.SendMessage ("ball_reset");
-		BroadcastMessage ("plyr_reset");
-		Time.timeScale = 1;
+	plyr_score_left = 0;
+	plyr_score_right = 0;
+	trns_ball.gameObject.SendMessage ("ball_reset");
+	BroadcastMessage ("plyr_reset");
 }
 
 //Quit Function
 function game_quit () {
-		Application.Quit();
-	}
-
+	Application.LoadLevel ("Menu_Main");
+}	
