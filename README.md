@@ -1,12 +1,6 @@
-# Pong
-
 ![alt text](Pong.png "Logo Title Text 1")
 
 ### Version: 0.4
-
-<br>
-
-Click <a href ="/public/projects/pong/{{ page.version }}/index.html" target="blank">here</a> to play in new tab/window. Useful for resizing the game.
 
 ### Controls
 
